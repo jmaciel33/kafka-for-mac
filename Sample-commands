@@ -1,0 +1,18 @@
+-- Criar tópico
+
+docker run \
+  --net=kafka-for-mac_default \
+  --rm confluentinc/cp-kafka:latest \
+  kafka-topics --create --topic foo --partitions 1 --replication-factor 1 \
+  --if-not-exists --zookeeper zookeeper:2181
+
+-- Produzir mensagens no tópico
+
+docker run \
+  --net=kafka-for-mac_default \
+  --rm confluentinc/cp-kafka:latest \
+  bash -c "seq 42 | kafka-console-producer --request-required-acks 1 \
+  --broker-list kafka:9092 --topic foo && echo 'Produced 42 messages.'"
+
+  
+https://docs.confluent.io/current/installation/docker/docs/installation/single-node-client.html
